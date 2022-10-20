@@ -24,6 +24,7 @@ namespace CompanyDetailMinimalApi.Services
             {
                 contactList.Add(contact.ToContactDetail(company.Id));
             }
+            company.Contacts = string.Join(",", contactList.Select(x => x.Id));
             var res1 = await _companyDetailRepository.CreateAsync(company);
             var res2 = await _contactRepository.BatchWriteAsync(contactList);
             if(res1 == true && res2 == true)
@@ -33,32 +34,37 @@ namespace CompanyDetailMinimalApi.Services
             return null;
         }
 
-        public Task<bool> DeleteCompanyAsync(Guid id)
+        public async Task<bool> DeleteCompanyAsync(Guid id)
         {
             throw new NotImplementedException();
         }
 
-        public Task<bool> DeleteContactAsync(Guid id)
+        public async Task<bool> DeleteContactAsync(Guid id)
         {
             throw new NotImplementedException();
         }
 
-        public Task<CompanyDetailResponse> GetCompanyAsync(Guid id)
+        public async Task<CompanyDetailResponse> GetCompanyAsync(Guid id)
+        {
+            var res = await _companyDetailRepository.GetAsync(id);
+            if (res == null) return null;
+            var contactIds = res.Contacts.Split(",").Select(x=>Guid.Parse(x)).ToList();
+            var contactList = await _contactRepository.BatchGetAsync(id, contactIds);
+            
+            return res.FromCompanyDto(contactList);
+        }
+
+        public async Task<ContactDetailResponse> GetContactAsync(Guid id)
         {
             throw new NotImplementedException();
         }
 
-        public Task<ContactDetailResponse> GetContactAsync(Guid id)
+        public async Task<bool> UpdateCompanyAsync(CompanyDetailCreateRequest company)
         {
             throw new NotImplementedException();
         }
 
-        public Task<bool> UpdateCompanyAsync(CompanyDetailCreateRequest company)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<bool> UpdateContactAsync(ContactDetailRequest contact)
+        public async Task<bool> UpdateContactAsync(ContactDetailRequest contact)
         {
             throw new NotImplementedException();
         }

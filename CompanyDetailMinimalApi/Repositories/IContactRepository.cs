@@ -13,5 +13,7 @@ namespace CompanyDetailMinimalApi.Repositories
         Task<bool> DeleteAsync(Guid id);
 
         Task<bool> BatchWriteAsync(List<ContactDetailDto> contactDetailList);
+        Task<List<ContactDetailDto>> BatchGetAsync(Guid companyId, List<Guid> contactIds);
+
     }
 }

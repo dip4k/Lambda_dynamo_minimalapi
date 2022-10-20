@@ -24,5 +24,14 @@ namespace CompanyDetailMinimalApi.Controllers
             if (response == null) return NotFound("Write operation failed");
             return Ok(response);
         }
+
+        [HttpGet("{id:guid}")]
+
+        public async Task<IActionResult> GetCompany(Guid id)
+        {
+            var response = await _appService.GetCompanyAsync(id);
+            if (response == null) return NotFound("No Element Found");
+            return Ok(response);
+        }
     }
 }

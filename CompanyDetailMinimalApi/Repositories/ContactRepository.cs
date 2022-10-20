@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System.Collections.Generic;
+using System.Net;
 using System.Text.Json;
 
 using Amazon.DynamoDBv2;
@@ -42,7 +43,6 @@ namespace CompanyDetailMinimalApi.Repositories
             int callCount = 0;
             do
             {
-                Console.WriteLine("Making request");
                 response = await _dynamoDb.BatchWriteItemAsync(request);
                 callCount++;
 
@@ -52,7 +52,7 @@ namespace CompanyDetailMinimalApi.Repositories
             } while (response.UnprocessedItems.Count > 0);
 
             //Console.WriteLine("Total # of batch write API calls made: {0}", callCount);
-            return callCount == contactDetailList.Count;
+            return true;
 
         }
 
@@ -115,6 +115,54 @@ namespace CompanyDetailMinimalApi.Repositories
             };
             var response = await _dynamoDb.DeleteItemAsync(deleteItemRequest);
             return response.HttpStatusCode == HttpStatusCode.OK;
+        }
+
+        public async Task<List<ContactDetailDto>> BatchGetAsync(Guid companyId, List<Guid> contactIds)
+        {
+            var res = new List<ContactDetailDto>();
+            List<Dictionary<string, AttributeValue>> keys = new List<Dictionary<string, AttributeValue>>();
+            foreach (var contactId in contactIds)
+            {
+                keys.Add(
+                    new Dictionary<string, AttributeValue>(){
+                        { "pk", new AttributeValue { S = companyId.ToString() } },
+                        { "sk", new AttributeValue { S = contactId.ToString() } }
+                    });
+            }
+            var request = new BatchGetItemRequest
+            {
+                RequestItems = new Dictionary<string, KeysAndAttributes>()
+                {
+                    { _tableName,
+                        new KeysAndAttributes
+                        {
+                            Keys = keys
+                        }
+                    }
+                }
+            };
+
+            var result = await _dynamoDb.BatchGetItemAsync(request);
+
+            var responses = result.Responses; // The attribute list in the response.
+
+            var table1Results = responses[_tableName];
+
+            foreach (var item in table1Results)
+            {
+                var itemAsDocument = Document.FromAttributeMap(item);
+                var obj = JsonSerializer.Deserialize<ContactDetailDto>(itemAsDocument.ToJson());
+                res.Add(obj);
+            }
+
+            // Any unprocessed keys? could happen if you exceed ProvisionedThroughput or some other error.
+            Dictionary<string, KeysAndAttributes> unprocessedKeys = result.UnprocessedKeys;
+            foreach (KeyValuePair<string, KeysAndAttributes> pair in unprocessedKeys)
+            {
+                Console.WriteLine(pair.Key, pair.Value);
+            }
+
+            return res;
         }
     }
 }

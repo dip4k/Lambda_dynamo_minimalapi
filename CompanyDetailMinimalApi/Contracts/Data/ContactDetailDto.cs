@@ -5,7 +5,7 @@ namespace CompanyDetailMinimalApi.Contracts.Data
     public class ContactDetailDto
     {
         [JsonPropertyName("pk")]
-        public string Pk => Id;
+        public string Pk => CompanyDetailId;
 
         [JsonPropertyName("sk")]
         public string Sk => Id;

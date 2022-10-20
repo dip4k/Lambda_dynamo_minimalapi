@@ -6,6 +6,7 @@ using Amazon.DynamoDBv2.DocumentModel;
 using Amazon.DynamoDBv2.Model;
 
 using CompanyDetailMinimalApi.Contracts.Data;
+using CompanyDetailMinimalApi.Repositories.DynamoDbUtils;
 
 namespace CompanyDetailMinimalApi.Repositories
 {
@@ -22,14 +23,7 @@ namespace CompanyDetailMinimalApi.Repositories
 
         public async Task<bool> CreateAsync(CompanyDetailDto companyDetail)
         {
-            var companyDetailAsJson = JsonSerializer.Serialize(companyDetail);
-            var itemAsDocument = Document.FromJson(companyDetailAsJson);
-            var itemAsAttributes = itemAsDocument.ToAttributeMap();
-            var createItemRequest = new PutItemRequest
-            {
-                TableName = _tableName,
-                Item = itemAsAttributes
-            };
+            var createItemRequest = DynamoUtils.CreatePutItemRequestObj(companyDetail, _tableName);
 
             var response = await _dynamoDb.PutItemAsync(createItemRequest);
             return response.HttpStatusCode == HttpStatusCode.OK;
