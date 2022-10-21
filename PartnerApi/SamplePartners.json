@@ -1,0 +1,38 @@
+[
+  {
+    "Id": 1,
+    "Type": "Caregiving",
+    "TypeId": 1,
+    "Name": "Ianacare"
+  },
+  {
+    "Id": 2,
+    "Type": "Caregiving",
+    "TypeId": 1,
+    "Name": "Joshin"
+  },
+  {
+    "Id": 3,
+    "Type": "Caregiving",
+    "TypeId": 1,
+    "Name": "Cariloop"
+  },
+  {
+    "Id": 4,
+    "Type": "Parenting",
+    "TypeId": 2,
+    "Name": "Cleo"
+  },
+  {
+    "Id": 5,
+    "Type": "Parenting",
+    "TypeId": 2,
+    "Name": "Everymother"
+  },
+  {
+    "Id": 6,
+    "Type": "Parenting",
+    "TypeId": 2,
+    "Name": "Pumpspotting"
+  }
+]
