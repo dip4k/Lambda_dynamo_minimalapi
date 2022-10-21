@@ -7,7 +7,8 @@ using Amazon.DynamoDBv2.DocumentModel;
 using Amazon.DynamoDBv2.Model;
 
 using CompanyDetailMinimalApi.Contracts.Data;
-using CompanyDetailMinimalApi.Repositories.DynamoDbUtils;
+
+using DynamoDbUtils;
 
 namespace CompanyDetailMinimalApi.Repositories
 {
@@ -82,9 +83,7 @@ namespace CompanyDetailMinimalApi.Repositories
             {
                 return null;
             }
-
-            var itemAsDocument = Document.FromAttributeMap(response.Item);
-            return JsonSerializer.Deserialize<ContactDetailDto>(itemAsDocument.ToJson());
+            return DynamoUtils.MapDynamoResponseToDto<ContactDetailDto>(response.Item);
         }
 
         public async Task<bool> UpdateAsync(ContactDetailDto contactDetail)
@@ -150,8 +149,7 @@ namespace CompanyDetailMinimalApi.Repositories
 
             foreach (var item in table1Results)
             {
-                var itemAsDocument = Document.FromAttributeMap(item);
-                var obj = JsonSerializer.Deserialize<ContactDetailDto>(itemAsDocument.ToJson());
+                var obj = DynamoUtils.MapDynamoResponseToDto<ContactDetailDto>(item);
                 res.Add(obj);
             }
 

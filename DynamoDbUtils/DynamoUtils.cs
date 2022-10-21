@@ -3,7 +3,7 @@ using Amazon.DynamoDBv2.Model;
 
 using System.Text.Json;
 
-namespace CompanyDetailMinimalApi.Repositories.DynamoDbUtils
+namespace DynamoDbUtils
 {
     public static class DynamoUtils
     {

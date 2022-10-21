@@ -6,7 +6,8 @@ using Amazon.DynamoDBv2.DocumentModel;
 using Amazon.DynamoDBv2.Model;
 
 using CompanyDetailMinimalApi.Contracts.Data;
-using CompanyDetailMinimalApi.Repositories.DynamoDbUtils;
+
+using DynamoDbUtils;
 
 namespace CompanyDetailMinimalApi.Repositories
 {
@@ -48,8 +49,7 @@ namespace CompanyDetailMinimalApi.Repositories
                 return null;
             }
 
-            var itemAsDocument = Document.FromAttributeMap(response.Item);
-            return JsonSerializer.Deserialize<CompanyDetailDto>(itemAsDocument.ToJson());
+            return DynamoUtils.MapDynamoResponseToDto<CompanyDetailDto>(response.Item);
         }
 
         public async Task<bool> UpdateAsync(CompanyDetailDto companyDetail)
