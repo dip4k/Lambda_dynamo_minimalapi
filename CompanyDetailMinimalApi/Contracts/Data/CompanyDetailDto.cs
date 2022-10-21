@@ -29,5 +29,7 @@ namespace CompanyDetailMinimalApi.Contracts.Data
         public bool? IsParenting { get; init; }
         public string ParentingPartners { get; init; }
         public string Contacts { get; set; }
+        public DateTime CreationTime { get; set; }
+        public DateTime? ModificationTime { get; set; }
     }
 }

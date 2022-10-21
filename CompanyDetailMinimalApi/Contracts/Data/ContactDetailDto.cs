@@ -15,5 +15,8 @@ namespace CompanyDetailMinimalApi.Contracts.Data
         public string Email { get; init; }
         public string Contactnumber { get; init; }
         public string CompanyDetailId { get; set; }
+        public DateTime CreationTime { get; set; }
+        public DateTime? ModificationTime { get; set; }
+
     }
 }

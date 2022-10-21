@@ -24,7 +24,8 @@ namespace CompanyDetailMinimalApi.Mappings
                 IsCaregiving = companyDetailCreateRequest.Journeys.Caregiving.Enabled,
                 CaregivingPartners = string.Join(",", companyDetailCreateRequest.Journeys.Caregiving.Partners),
                 IsParenting = companyDetailCreateRequest.Journeys.Parenting.Enabled,
-                ParentingPartners = string.Join(",", companyDetailCreateRequest.Journeys.Parenting.Partners)
+                ParentingPartners = string.Join(",", companyDetailCreateRequest.Journeys.Parenting.Partners),
+                CreationTime = DateTime.UtcNow
             };
         }
 
@@ -36,7 +37,8 @@ namespace CompanyDetailMinimalApi.Mappings
                 CompanyDetailId = companyDetailId,
                 Contactnumber = contactDetail.Contactnumber,
                 Email = contactDetail.Email,
-                Name = contactDetail.Name
+                Name = contactDetail.Name,
+                CreationTime = DateTime.UtcNow
             };
         }
     }
